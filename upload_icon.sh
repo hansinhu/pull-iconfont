@@ -2,7 +2,7 @@
 
 echo "Start Downloading Iconfont====="
 
-curl -v --cookie "YOUR_PROJECT_COOKIE --output download.zip
+curl -v --cookie "<% YOUR_PROJECT_COOKIE %>" <% YOUR_PROJECT_URL %> --output download.zip
 
 echo "Start Unzip Iconfont===="
 
