@@ -8,7 +8,7 @@
   },
   "files": [
     "index.js",
-    "src/*/*"
+    "src"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
