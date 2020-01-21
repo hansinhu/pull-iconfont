@@ -1,7 +1,7 @@
 {
   "name": "pull-iconfont",
   "version": "1.0.1",
-  "description": "",
+  "description": "pull iconfont, download iconfont",
   "main": "./src/index.js",
   "bin": {
     "pull-iconfont": "./src/index.js"
