@@ -54,7 +54,9 @@ exports.download = async function (config, outPath) {
         const iconFiles = await fs.readdirSync(path.join(outPath, fontDir))
         console.log(chalk.green('拷贝文件'));
         // copy到outPath
-        iconFiles.forEach(async file => {
+        iconFiles.filter(file => {
+          return !!config.saveDemoFile || !file.includes('demo')
+        }).forEach(async file => {
           try {
             await fs.copyFileSync(path.join(outPath, fontDir, file), `${outPath}/${file}`)
           } catch (err) {

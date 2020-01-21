@@ -13,6 +13,7 @@ module.exports = {
   spm: '< 链接中的参数 >',
   pid: '< 链接中的参数 >',
   ctoken: '< 链接中的参数 >',
+  saveDemoFile: false, // 是否保存demo文件
 }
 
 ```
@@ -29,3 +30,10 @@ download-iconfont -c <config-path> -o <out-path>
 ```bash
 download-iconfont -c .diconfontrc.js -o ./style/iconfont
 ```
+
+## FAQ
+
+### 配置文件的参数哪里查看？
+
+
+
