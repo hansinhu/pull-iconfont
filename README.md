@@ -1,7 +1,7 @@
 # 下载iconfont命令行
 
 ```bash
-npm install download-iconfont -g
+npm install pull-iconfont -g
 ```
 
 ## 在你的项目中添加配置文件
@@ -20,7 +20,7 @@ module.exports = {
 
 ## 输入下面命令下载
 
-download-iconfont -c <% config-path %> -o <% out-path %>
+pull-iconfont -c <% config-path %> -o <% out-path %>
 
 <% config-path %>: 配置文件路径
 <% outpath %>：下载icon到对应路径
@@ -28,13 +28,13 @@ download-iconfont -c <% config-path %> -o <% out-path %>
 例如：
 
 ```bash
-download-iconfont -c .diconfontrc.js -o ./style/iconfont
+pull-iconfont -c .diconfontrc.js -o ./style/iconfont
 ```
 
 ## FAQ
 
 ### 配置文件的参数哪里查看？
 
-![alt text](https://raw.githubusercontent.com/hansinhu/download-iconfont/master/step01.jpg)
+![alt text](https://raw.githubusercontent.com/hansinhu/pull-iconfont/master/step01.jpg)
 
-![alt text](https://raw.githubusercontent.com/hansinhu/download-iconfont/master/step02.png)
+![alt text](https://raw.githubusercontent.com/hansinhu/pull-iconfont/master/step02.png)
