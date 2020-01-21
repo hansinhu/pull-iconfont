@@ -18,12 +18,12 @@ module.exports = {
 
 ```
 
-## 下载
+## 输入下面命令下载
 
-download-iconfont -c <config-path> -o <out-path>
+download-iconfont -c <% config-path %> -o <% out-path %>
 
-<config-path>: 配置文件路径
-<outpath>：下载icon到对应路径
+<% config-path %>: 配置文件路径
+<% outpath %>：下载icon到对应路径
 
 例如：
 
@@ -35,5 +35,6 @@ download-iconfont -c .diconfontrc.js -o ./style/iconfont
 
 ### 配置文件的参数哪里查看？
 
+![alt text](https://raw.githubusercontent.com/hansinhu/download-iconfont/master/step01.jpg)
 
-
+![alt text](https://raw.githubusercontent.com/hansinhu/download-iconfont/master/step02.png)
