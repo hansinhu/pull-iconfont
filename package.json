@@ -11,7 +11,7 @@
     "src"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./index.js -c ./example/local/.pulliconfontrc.js -o ./example/style/iconfont"
   },
   "repository": {
     "type": "git",

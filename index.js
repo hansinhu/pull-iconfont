@@ -6,7 +6,7 @@ const path = require('path')
 const packageJson = require('./package.json');
 const { download } = require('./src/download')
 
-let configPath = `${process.env.PWD}/.diconfontrc`
+let configPath = `${process.env.PWD}/.pulliconfontrc`
 let outputPath = `${process.env.PWD}/iconfont`
 
 const program = commander
