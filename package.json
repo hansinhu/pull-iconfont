@@ -2,9 +2,9 @@
   "name": "pull-iconfont",
   "version": "1.0.3",
   "description": "pull iconfont, download iconfont",
-  "main": "./src/index.js",
+  "main": "./index.js",
   "bin": {
-    "pull-iconfont": "./src/index.js"
+    "pull-iconfont": "./index.js"
   },
   "files": [
     "index.js",
@@ -30,16 +30,10 @@
   },
   "homepage": "https://github.com/hansinhu/pull-iconfont#readme",
   "dependencies": {
-    "adm-zip": "^0.4.13",
     "chalk": "^2.4.2",
     "commander": "^2.20.3",
-    "fs-extra": "^8.0.1",
-    "fstream": "^1.0.12",
-    "open": "^6.3.0",
-    "ora": "^3.4.0",
     "request": "^2.88.0",
     "rimraf": "^3.0.0",
-    "unzip": "^0.1.11",
     "unzipper": "^0.10.5"
   }
 }
