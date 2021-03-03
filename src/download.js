@@ -24,7 +24,7 @@ exports.download = async function (config, outPath) {
   const writeZipStream = fs.createWriteStream(`${outPath}/download.zip`)
 
   request.get({
-    url: `https://www.iconfont.cn/api/project/download.zip?${queryStr}`,
+    url: config.downloadUrl || `https://www.iconfont.cn/api/project/download.zip?${queryStr}`,
     headers: {
       cookie: config.cookie
     }
@@ -53,6 +53,7 @@ exports.download = async function (config, outPath) {
         const fontDir = dirs.find(item => item.includes('font_'))
         const iconFiles = await fs.readdirSync(path.join(outPath, fontDir))
         console.log(chalk.green('拷贝文件'));
+        console.log(chalk.green('code by hansinhu: https://github.com/hansinhu/pull-iconfont'));
         // copy到outPath
         iconFiles.filter(file => {
           return !!config.saveDemoFile || !file.includes('demo')
