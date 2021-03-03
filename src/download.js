@@ -7,24 +7,22 @@ const rimraf = require('rimraf')
 
 exports.download = async function (config, outPath) {
 
-  const existsOutDir = await fs.existsSync(outPath)
+  const existsOutDir = await fs.existsSync(config.outPath)
   if (!existsOutDir) {
     fs.mkdir(outPath, { recursive: true }, (err) => {
       if (err) throw err;
     });
   }
 
-  console.log(outPath)
-
-  const queryStr = Object.keys(config)
-    .filter(key => ['spm', 'pid', 'ctoken'].includes(key))
-    .map(key => `${key}=${config[key]}`)
-    .join('&')
+  // const queryStr = Object.keys(config)
+  //   .filter(key => ['spm', 'pid', 'ctoken'].includes(key))
+  //   .map(key => `${key}=${config[key]}`)
+  //   .join('&')
 
   const writeZipStream = fs.createWriteStream(`${outPath}/download.zip`)
 
   request.get({
-    url: config.downloadUrl || `https://www.iconfont.cn/api/project/download.zip?${queryStr}`,
+    url: config.downloadUrl,
     headers: {
       cookie: config.cookie
     }

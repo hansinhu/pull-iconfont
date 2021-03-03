@@ -7,24 +7,18 @@ const packageJson = require('./package.json');
 const { download } = require('./src/download')
 
 let configPath = `${process.env.PWD}/.pulliconfontrc`
-let outputPath = `${process.env.PWD}/iconfont`
+let defaultOutputPath = `${process.env.PWD}/iconfont`
 
-const program = commander
+commander
   .version(packageJson.version)
   .option('-c, --config <config>', 'config.js path')
-  .option('-o, --output <output>', 'output path')
   .action(function ({ config, output }) {
     if (config) {
       configPath = path.resolve(config)
     }
-    if (output) {
-      outputPath = path.resolve(output)
-    }
   })
   .allowUnknownOption()
   .parse(process.argv)
-
-console.log(`configPath: ${configPath}, \noutputPath: ${outputPath}`)
 
 // 解析项目类型与名称
 // const processArgs = process.argv.slice(2)
@@ -41,6 +35,8 @@ async function main () {
   }
 
   if (config) {
+    const outputPath = config.outputPath ? path.resolve(config.outputPath) : defaultOutputPath
+    console.log(`configPath: ${configPath}, \noutputPath: ${outputPath}`)
     download(config, outputPath)
   }
 }
