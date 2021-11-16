@@ -1,16 +1,29 @@
 #!/usr/bin/env node
 
-const commander = require('commander');
-const chalk = require('chalk');
-const path = require('path')
-const packageJson = require('./package.json');
-const { download } = require('./src/download')
-const getOutPath = require('./src/getOutPath')
+// local test
+// chmod -R 775 ./dist
+
+const commander = require('commander')
+import chalk from 'chalk'
+import { resolve } from 'path'
+import { download } from './download'
+import { getOutPath } from './getOutPath'
+import { svgParser } from './svgParser'
+
+export interface Config {
+  downloadUrl: string;
+  cookie: string;
+  saveDemoFile: boolean; // 是否保存demo文件
+  outputPath: string
+  iconPrefix: string
+  pickicons: string[]
+  useSvg: boolean
+}
 
 let defulatConfigPath = '/.pulliconfontrc'
-let defaultOutputPath = `${process.env.PWD}/iconfont`
+let configPath = '' 
 
-const defaultConfig = {
+const defaultConfig: Config = {
   downloadUrl:'',
   cookie: '',
   saveDemoFile: true, // 是否保存demo文件
@@ -20,14 +33,20 @@ const defaultConfig = {
   useSvg: false,
 }
 
-commander
-  .version(packageJson.version)
+try {
+  commander
+  .version('1.0')
   .option('-c, --config <config>', 'config.js path')
-  .action(function ({ config, output }) {
-    configPath = path.resolve(config || defulatConfigPath)
+  .action(function ({ config }: any) {
+    configPath = resolve(config || defulatConfigPath)
   })
   .allowUnknownOption()
   .parse(process.argv)
+
+} catch (err) {
+  console.log(err)
+}
+
 
 // 解析项目类型与名称
 // const processArgs = process.argv.slice(2)
@@ -53,6 +72,7 @@ async function main () {
 
   if (config.useSvg) {
     const outPath = getOutPath(config)
+    svgParser(config)
     console.log('useSvg', outPath)
   }
 }

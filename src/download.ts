@@ -1,17 +1,24 @@
-var fs = require('fs');
+import fs from 'fs';
 var request = require('request');
 const path = require('path')
 const chalk = require('chalk')
 const unzip = require('unzipper')
 const rimraf = require('rimraf')
+import { getOutPath } from './getOutPath'
 
-exports.download = async function (config, outPath) {
+import { Config } from './index'
 
-  const existsOutDir = await fs.existsSync(config.outPath)
+const download = async function (config: Config) {
+
+  const outPath = getOutPath(config)
+
+  console.log(chalk.green('config:'), config)
+
+  console.log(chalk.green('outPath:'), outPath);
+
+  const existsOutDir = fs.existsSync(outPath)
   if (!existsOutDir) {
-    fs.mkdir(outPath, { recursive: true }, (err) => {
-      if (err) throw err;
-    });
+    fs.mkdirSync(outPath, { recursive: true });
   }
 
   // const queryStr = Object.keys(config)
@@ -27,10 +34,10 @@ exports.download = async function (config, outPath) {
       cookie: config.cookie
     }
   })
-  .on('response', async function(response) {
+  .on('response', async function(response: { statusCode: any; }) {
     console.log(response.statusCode)
   })
-  .on('error', (err) => {
+  .on('error', (err: any) => {
     console.error(err)
   })
   .pipe(writeZipStream)
@@ -39,12 +46,12 @@ exports.download = async function (config, outPath) {
     console.log(err);
   });
 
-  writeZipStream.on('close', function (err) {
+  writeZipStream.on('close', function () {
     console.log(chalk.green('下载完成'));
 
     const unzipStream = fs.createReadStream(`${outPath}/download.zip`)
     unzipStream.pipe(unzip.Extract({ path: outPath }))
-    unzipStream.on('close', function (err) {
+    unzipStream.on('close', function () {
       console.log(chalk.green('解压完成'));
       setTimeout(async () => {
         const dirs = await fs.readdirSync(outPath)
@@ -73,5 +80,8 @@ exports.download = async function (config, outPath) {
       }, 2000);
     });
   });
+}
 
+export {
+  download
 }

@@ -2,16 +2,17 @@
   "name": "pull-iconfont",
   "version": "2.0.0",
   "description": "pull iconfont, download iconfont",
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "bin": {
     "pull-iconfont": "./index.js"
   },
   "files": [
-    "index.js",
-    "src"
+    "src",
+    "dist"
   ],
   "scripts": {
-    "test": "./index.js -c ./example/local/.pulliconfontrc.js -o ./example/style/iconfont"
+    "test": "./dist/index.js -c ./example/local/.pulliconfontrc-2.js -o ./example/style/iconfont",
+    "build": "tsc --project tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -30,10 +31,15 @@
   },
   "homepage": "https://github.com/hansinhu/pull-iconfont#readme",
   "dependencies": {
+    "@babel/parser": "^7.16.3",
     "chalk": "^2.4.2",
     "commander": "^2.20.3",
     "request": "^2.88.0",
     "rimraf": "^3.0.0",
     "unzipper": "^0.10.5"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/node": "^12.20.37"
   }
 }
