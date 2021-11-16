@@ -11,7 +11,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "./dist/index.js -c ./example/local/.pulliconfontrc-2.js -o ./example/style/iconfont",
+    "test": "./dist/index.js -c ./example/local/.pulliconfontrc-2.js",
     "build": "tsc --project tsconfig.json"
   },
   "repository": {

@@ -23,7 +23,7 @@ export interface Config {
 let defulatConfigPath = '/.pulliconfontrc'
 let configPath = '' 
 
-const defaultConfig: Config = {
+export const defaultConfig: Config = {
   downloadUrl:'',
   cookie: '',
   saveDemoFile: true, // 是否保存demo文件

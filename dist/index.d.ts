@@ -8,3 +8,4 @@ export interface Config {
     pickicons: string[];
     useSvg: boolean;
 }
+export declare const defaultConfig: Config;

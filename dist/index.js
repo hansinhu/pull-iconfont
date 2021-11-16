@@ -6,6 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.defaultConfig = void 0;
 const commander = require('commander');
 const chalk_1 = __importDefault(require("chalk"));
 const path_1 = require("path");
@@ -14,7 +15,7 @@ const getOutPath_1 = require("./getOutPath");
 const svgParser_1 = require("./svgParser");
 let defulatConfigPath = '/.pulliconfontrc';
 let configPath = '';
-const defaultConfig = {
+exports.defaultConfig = {
     downloadUrl: '',
     cookie: '',
     saveDemoFile: true,
@@ -52,7 +53,7 @@ async function main() {
     }
     console.log(__dirname);
     await download_1.download({
-        ...defaultConfig,
+        ...exports.defaultConfig,
         ...config,
     });
     if (config.useSvg) {
