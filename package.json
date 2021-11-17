@@ -4,7 +4,7 @@
   "description": "pull iconfont, download iconfont",
   "main": "./dist/index.js",
   "bin": {
-    "pull-iconfont": "./index.js"
+    "pull-iconfont": "./dist/index.js"
   },
   "files": [
     "src",
