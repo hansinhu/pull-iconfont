@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { parse } from '@babel/parser'
 import { resolve } from 'path'
+import chalk from 'chalk'
 import { Config } from './index'
 
 const svgParser = async (config: Config) => {
@@ -20,7 +21,7 @@ const svgParser = async (config: Config) => {
 			iconPicked[`${config.iconPrefix}-${icon}`] = icon
 		})
 
-		console.log('iconPicked:', iconPicked)
+		console.log('Picked SVG Icon:', iconPicked)
 
 		const res = code.replace(/<svg>(.*)?<\/svg>/ig, (match, p1) => {
 			const nodes = p1.split("<symbol ")
@@ -36,7 +37,10 @@ const svgParser = async (config: Config) => {
 
 			return `<svg>${resultNodes.join('')}</svg>`
 		})
-		writeFileSync(resolve(`${config.outputPath}/parsedCode-2.js`), res)
+
+		writeFileSync(resolve(`${config.outputPath}/iconfont.js`), res)
+
+		console.log(chalk.green('SVG图标解析完成'));
 	}
 	// const parsedCode = parse(code)
 	// writeFileSync(resolve(`${config.outputPath}/parsedCode.js`), JSON.stringify(parsedCode))

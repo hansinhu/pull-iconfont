@@ -7,7 +7,6 @@ const commander = require('commander')
 import chalk from 'chalk'
 import { resolve } from 'path'
 import { download } from './download'
-import { getOutPath } from './getOutPath'
 import { svgParser } from './svgParser'
 
 export interface Config {
@@ -63,17 +62,14 @@ async function main () {
     throw e;
   }
 
-  console.log(__dirname)
-
   await download({
     ...defaultConfig,
     ...config,
   })
 
   if (config.useSvg) {
-    const outPath = getOutPath(config)
+    console.log('useSvg: true')
     svgParser(config)
-    console.log('useSvg', outPath)
   }
 }
 

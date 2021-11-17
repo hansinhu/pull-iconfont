@@ -11,7 +11,6 @@ const commander = require('commander');
 const chalk_1 = __importDefault(require("chalk"));
 const path_1 = require("path");
 const download_1 = require("./download");
-const getOutPath_1 = require("./getOutPath");
 const svgParser_1 = require("./svgParser");
 let defulatConfigPath = '/.pulliconfontrc';
 let configPath = '';
@@ -51,15 +50,13 @@ async function main() {
         console.log(chalk_1.default.red(`load config file failed. \n file path: \n${configPath}`));
         throw e;
     }
-    console.log(__dirname);
     await download_1.download({
         ...exports.defaultConfig,
         ...config,
     });
     if (config.useSvg) {
-        const outPath = getOutPath_1.getOutPath(config);
+        console.log('useSvg: true');
         svgParser_1.svgParser(config);
-        console.log('useSvg', outPath);
     }
 }
 main()
