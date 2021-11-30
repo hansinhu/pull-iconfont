@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-// local test
-// chmod -R 775 ./dist
-
 import chalk from 'chalk'
 import { resolve } from 'path'
 import { download } from './download'
@@ -10,7 +7,7 @@ import { svgParser } from './svgParser'
 import { getConfig, showErrorLog, showLog, Config } from './utils'
 const commander = require('commander')
 
-const defulatConfigPath = '/.pulliconfontrc'
+const defulatConfigPath = './.pulliconfontrc'
 let configPath = ''
 
 try {
@@ -27,21 +24,24 @@ try {
 }
 
 async function main() {
-  let config = null
+  // Step1: 解析配置文件
+  let configFile = null
   try {
-    config = require(configPath) as Config
+    configFile = require(configPath) as Config
   } catch (e) {
-    showErrorLog(`load config file failed. \n file path: \n${configPath}`)
+    showErrorLog(`加载配置文件失败: \n${configPath}`)
     throw e
   }
 
+  // Step2: 下载icon文件
   await download(
-    getConfig(config)
+    getConfig(configFile)
   )
 
-  if (config.useSvg) {
-    console.log('useSvg:', true)
-    svgParser(config)
+  // Step3: 如果是svg图标，解析选择需要的图标
+  if (configFile.useSvg) {
+    showLog('使用 svg 图标，通过 pickicons 解析需要的icon')
+    svgParser(configFile)
   }
 }
 
