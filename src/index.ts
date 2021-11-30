@@ -7,32 +7,11 @@ import chalk from 'chalk'
 import { resolve } from 'path'
 import { download } from './download'
 import { svgParser } from './svgParser'
-import { showErrorLog, showLog } from './utils'
-
+import { getConfig, showErrorLog, showLog, Config } from './utils'
 const commander = require('commander')
-
-export interface Config {
-  downloadUrl: string;
-  cookie: string;
-  saveDemoFile: boolean; // 是否保存demo文件
-  outputPath: string
-  iconPrefix: string
-  pickicons: string[]
-  useSvg: boolean
-}
 
 const defulatConfigPath = '/.pulliconfontrc'
 let configPath = ''
-
-export const defaultConfig: Config = {
-  downloadUrl: '',
-  cookie: '',
-  saveDemoFile: true, // 是否保存demo文件
-  outputPath: './iconfont',
-  iconPrefix: 'icon',
-  pickicons: [],
-  useSvg: false,
-}
 
 try {
   commander
@@ -50,16 +29,15 @@ try {
 async function main() {
   let config = null
   try {
-    config = require(configPath)
+    config = require(configPath) as Config
   } catch (e) {
     showErrorLog(`load config file failed. \n file path: \n${configPath}`)
     throw e
   }
 
-  await download({
-    ...defaultConfig,
-    ...config,
-  })
+  await download(
+    getConfig(config)
+  )
 
   if (config.useSvg) {
     console.log('useSvg:', true)

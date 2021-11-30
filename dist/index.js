@@ -6,7 +6,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultConfig = void 0;
 const chalk_1 = __importDefault(require("chalk"));
 const path_1 = require("path");
 const download_1 = require("./download");
@@ -15,15 +14,6 @@ const utils_1 = require("./utils");
 const commander = require('commander');
 const defulatConfigPath = '/.pulliconfontrc';
 let configPath = '';
-exports.defaultConfig = {
-    downloadUrl: '',
-    cookie: '',
-    saveDemoFile: true,
-    outputPath: './iconfont',
-    iconPrefix: 'icon',
-    pickicons: [],
-    useSvg: false,
-};
 try {
     commander
         .version('1.0')
@@ -46,10 +36,7 @@ async function main() {
         (0, utils_1.showErrorLog)(`load config file failed. \n file path: \n${configPath}`);
         throw e;
     }
-    await (0, download_1.download)({
-        ...exports.defaultConfig,
-        ...config,
-    });
+    await (0, download_1.download)((0, utils_1.getConfig)(config));
     if (config.useSvg) {
         console.log('useSvg:', true);
         (0, svgParser_1.svgParser)(config);

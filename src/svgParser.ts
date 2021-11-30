@@ -1,7 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { resolve } from 'path'
-import { Config } from './index'
-import { showLog } from './utils'
+import { showLog, Config } from './utils'
 
 const svgParser = async (config: Config) => {
   const jsPath = resolve(`${config.outputPath}/iconfont.js`)
@@ -10,6 +9,7 @@ const svgParser = async (config: Config) => {
 
   // <svg><symbol ****</symbol></svg>
   if (config.pickicons && config.pickicons.length) {
+
     const iconPicked: Record<string, string> = {}
     config.pickicons.forEach((icon) => {
       iconPicked[`${config.iconPrefix}-${icon}`] = icon
@@ -27,7 +27,6 @@ const svgParser = async (config: Config) => {
         }
         return ''
       })
-
       return `<svg>${resultNodes.join('')}</svg>`
     })
 

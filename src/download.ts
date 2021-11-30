@@ -1,7 +1,6 @@
 import fs from 'fs'
 import { getOutPath } from './getOutPath'
-import { Config } from './index'
-import { showLog, showErrorLog } from './utils'
+import { showLog, showErrorLog, Config } from './utils'
 import request from 'request'
 import { join } from 'path'
 import unzipper from 'unzipper'

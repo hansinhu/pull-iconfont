@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { Config } from './index'
+import { Config } from './utils'
 
 function getOutPath(config: Config): string {
   return resolve(config.outputPath)
