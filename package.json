@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "test": "./dist/index.js -c ./example/local/.pulliconfontrc-2.js",
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json",
+    "lint:ts": "eslint ./src --fix --ext .ts,.tsx"
   },
   "repository": {
     "type": "git",
@@ -39,7 +40,14 @@
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
+    "@hansin/lint-config": "^0.0.1",
     "@types/commander": "^2.12.2",
-    "@types/node": "^12.20.37"
+    "@types/node": "^12.20.37",
+    "@types/request": "^2.48.7",
+    "@types/rimraf": "^3.0.2",
+    "@types/unzipper": "^0.10.4",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.2",
+    "typescript": "^4.5.2"
   }
 }

@@ -1,52 +1,42 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { parse } from '@babel/parser'
 import { resolve } from 'path'
-import chalk from 'chalk'
 import { Config } from './index'
+import { showLog } from './utils'
 
 const svgParser = async (config: Config) => {
+  const jsPath = resolve(`${config.outputPath}/iconfont.js`)
 
-	const jsPath = resolve(`${config.outputPath}/iconfont.js`)
+  const code = readFileSync(jsPath, 'utf8')
 
-	let code = readFileSync(jsPath, 'utf8')
+  // <svg><symbol ****</symbol></svg>
+  if (config.pickicons && config.pickicons.length) {
+    const iconPicked: Record<string, string> = {}
+    config.pickicons.forEach((icon) => {
+      iconPicked[`${config.iconPrefix}-${icon}`] = icon
+    })
 
-	// <svg><symbol
-	// </symbol></svg>
-	if (config.pickicons && config.pickicons.length) {
+    console.log('Picked SVG Icon:', iconPicked)
 
-		const iconPicked: {
-			[index:string]: string
-		} = {}
-		config.pickicons.forEach((icon) => {
-			iconPicked[`${config.iconPrefix}-${icon}`] = icon
-		})
+    // eslint-disable-next-line
+    const res = code.replace(/<svg>(.*)?<\/svg>/ig, (match, p1) => {
+      const nodes = p1.split('<symbol ')
+      const resultNodes = nodes.map((icon: string) => {
+        const id = (icon.match(/id="([^"]*)"/) || [])[1]
+        if (id && iconPicked[id]) {
+          return `<symbol ${icon}`
+        }
+        return ''
+      })
 
-		console.log('Picked SVG Icon:', iconPicked)
+      return `<svg>${resultNodes.join('')}</svg>`
+    })
 
-		const res = code.replace(/<svg>(.*)?<\/svg>/ig, (match, p1) => {
-			const nodes = p1.split("<symbol ")
-			const resultNodes = nodes.map((icon: string) => {
-				const id = (icon.match(/id="([^"]*)"/) || [])[1]
-				if (id && iconPicked[id]) {
-					return `<symbol ${icon}`
-				}
-				return ''
-			});
+    writeFileSync(resolve(`${config.outputPath}/iconfont.js`), res)
 
-			
-
-			return `<svg>${resultNodes.join('')}</svg>`
-		})
-
-		writeFileSync(resolve(`${config.outputPath}/iconfont.js`), res)
-
-		console.log(chalk.green('SVG图标解析完成'));
-	}
-	// const parsedCode = parse(code)
-	// writeFileSync(resolve(`${config.outputPath}/parsedCode.js`), JSON.stringify(parsedCode))
-	// console.log(code)
+    showLog('SVG图标解析完成')
+  }
 }
 
 export {
-	svgParser,
+  svgParser,
 }

@@ -7,12 +7,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultConfig = void 0;
-const commander = require('commander');
 const chalk_1 = __importDefault(require("chalk"));
 const path_1 = require("path");
 const download_1 = require("./download");
 const svgParser_1 = require("./svgParser");
-let defulatConfigPath = '/.pulliconfontrc';
+const utils_1 = require("./utils");
+const commander = require('commander');
+const defulatConfigPath = '/.pulliconfontrc';
 let configPath = '';
 exports.defaultConfig = {
     downloadUrl: '',
@@ -27,8 +28,8 @@ try {
     commander
         .version('1.0')
         .option('-c, --config <config>', 'config.js path')
-        .action(function ({ config }) {
-        configPath = path_1.resolve(config || defulatConfigPath);
+        .action(({ config }) => {
+        configPath = (0, path_1.resolve)(config || defulatConfigPath);
     })
         .allowUnknownOption()
         .parse(process.argv);
@@ -36,43 +37,37 @@ try {
 catch (err) {
     console.log(err);
 }
-// 解析项目类型与名称
-// const processArgs = process.argv.slice(2)
-// if (processArgs && processArgs[1]) {
-//   console.log(processArgs)
-// }
 async function main() {
     let config = null;
     try {
         config = require(configPath);
     }
     catch (e) {
-        console.log(chalk_1.default.red(`load config file failed. \n file path: \n${configPath}`));
+        (0, utils_1.showErrorLog)(`load config file failed. \n file path: \n${configPath}`);
         throw e;
     }
-    await download_1.download({
+    await (0, download_1.download)({
         ...exports.defaultConfig,
         ...config,
     });
     if (config.useSvg) {
-        console.log('useSvg: true');
-        svgParser_1.svgParser(config);
+        console.log('useSvg:', true);
+        (0, svgParser_1.svgParser)(config);
     }
 }
 main()
-    .then((res) => {
-    console.log('end');
+    .then(() => {
+    (0, utils_1.showLog)('pull-iconfont end');
+    (0, utils_1.showLog)('code by hansinhu: https://github.com/hansinhu/pull-iconfont');
 })
-    .catch(err => {
-    console.log();
+    .catch((err) => {
     console.log('Aborting installation.');
     if (err.command) {
         console.log(`  ${chalk_1.default.cyan(err.command)} has failed.`);
     }
     else {
-        console.log(chalk_1.default.red('Unexpected error. Please report it as a bug:'));
+        (0, utils_1.showErrorLog)('Unexpected error. Please report it as a bug:');
         console.log(err);
     }
-    console.log();
     process.exit(1);
 });

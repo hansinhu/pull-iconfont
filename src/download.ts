@@ -1,28 +1,21 @@
-import fs from 'fs';
-var request = require('request');
-const path = require('path')
-const chalk = require('chalk')
-const unzip = require('unzipper')
-const rimraf = require('rimraf')
+import fs from 'fs'
 import { getOutPath } from './getOutPath'
-
 import { Config } from './index'
+import { showLog, showErrorLog } from './utils'
+import request from 'request'
+import { join } from 'path'
+import unzipper from 'unzipper'
+import rimraf from 'rimraf'
 
 const download = async function (config: Config) {
-
   const outPath = getOutPath(config)
 
-  console.log(chalk.green('outPath:'), outPath);
+  showLog(`outPath:${outPath}`)
 
   const existsOutDir = fs.existsSync(outPath)
   if (!existsOutDir) {
-    fs.mkdirSync(outPath, { recursive: true });
+    fs.mkdirSync(outPath, { recursive: true })
   }
-
-  // const queryStr = Object.keys(config)
-  //   .filter(key => ['spm', 'pid', 'ctoken'].includes(key))
-  //   .map(key => `${key}=${config[key]}`)
-  //   .join('&')
 
   const writeZipStream = fs.createWriteStream(`${outPath}/download.zip`)
 
@@ -30,61 +23,67 @@ const download = async function (config: Config) {
     request.get({
       url: config.downloadUrl,
       headers: {
-        cookie: config.cookie
-      }
+        cookie: config.cookie,
+      },
     })
-    .on('response', async function(response: { statusCode: any; }) {
-      console.log(response.statusCode)
-    })
-    .on('error', (err: any) => {
-      console.error(err)
-    })
-    .pipe(writeZipStream)
-  
-    writeZipStream.on('error', function (err) {
-      console.log(err);
+      .on('response', async (response: any) => {
+        console.log(response.req.path)
+        if (response.req.path.startsWith('/errors')) {
+          showErrorLog('下载失败, 请检查 cookie 是否过期')
+          throw new Error('下载失败')
+        }
+        showLog(`statusCode: ${response.statusCode}`)
+      })
+      .on('error', (err: any) => {
+        console.error(err)
+      })
+      .pipe(writeZipStream)
+
+    writeZipStream.on('error', (err) => {
+      console.log('eeeeeeerrror',err)
       reject(err)
-    });
-  
-    writeZipStream.on('close', function () {
-      console.log(chalk.green('下载完成'));
-  
+    })
+
+    writeZipStream.on('close', () => {
+      showLog('下载完成')
+
       const unzipStream = fs.createReadStream(`${outPath}/download.zip`)
-      unzipStream.pipe(unzip.Extract({ path: outPath }))
-      unzipStream.on('close', function () {
-        console.log(chalk.green('解压完成'));
+      unzipStream.pipe(unzipper.Extract({ path: outPath }))
+      unzipStream.on('close', () => {
+        showLog('解压完成')
         setTimeout(async () => {
-          const dirs = await fs.readdirSync(outPath)
-          const fontDir = dirs.find(item => item.includes('font_'))
-          const iconFiles = await fs.readdirSync(path.join(outPath, fontDir))
-          console.log(chalk.green('拷贝文件'));
-          console.log(chalk.green('code by hansinhu: https://github.com/hansinhu/pull-iconfont'));
+          const dirs = fs.readdirSync(outPath)
+          const fontDir = dirs.find((item) => item.includes('font_')) as string
+          const iconFiles = fs.readdirSync(join(outPath, fontDir))
+          showLog('拷贝文件')
           // copy到outPath
-          iconFiles.filter(file => {
+          iconFiles.filter((file) => {
             return !!config.saveDemoFile || !file.includes('demo')
-          }).forEach(async file => {
+          }).forEach(async (file) => {
             try {
-              await fs.copyFileSync(path.join(outPath, fontDir, file), `${outPath}/${file}`)
+              fs.copyFileSync(join(outPath, fontDir, file), `${outPath}/${file}`)
             } catch (err) {
               console.log(err)
             }
           })
-  
+
           // 删除过渡文件
           try {
-            await rimraf.sync(path.join(outPath, fontDir));
-            await rimraf.sync(`${outPath}/download.zip`);
+            await rimraf.sync(join(outPath, fontDir))
+            await rimraf.sync(`${outPath}/download.zip`)
           } catch (err) {
             console.log(err)
           }
           resolve('success')
-        }, 2000);
-      });
-    });
-
+        }, 2000)
+      })
+      unzipStream.on('err', (err) => {
+        console.log(err)
+      })
+    })
   })
 }
 
 export {
-  download
+  download,
 }

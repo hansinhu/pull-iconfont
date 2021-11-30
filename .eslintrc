@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "./node_modules/@hansin/lint-config/ts.js"
+  ],
+  "rules": {
+    "react/sort-comp": 0,
+    "no-console": "off",
+    "detect-non-literal": "off"
+  }
+}
