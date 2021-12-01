@@ -5,3 +5,16 @@ module.exports = {
   ctoken: 'url参数拷贝到这里',
   saveDemoFile: false,
 }
+
+// module.exports = {
+//   downloadUrl: 'https://www.iconfont.cn/api/project/download.zip?xxxxx=xxxx',
+//   cookie: 'cna=xxxxxxxx',
+//   saveDemoFile: false, // 是否保存demo文件
+//   outputPath: './styles/iconfont',
+//   useSvg: true,
+//   iconPrefix: 'icon',
+//   pickicons:[
+//     'user',
+//     'link',
+//   ]
+// }
