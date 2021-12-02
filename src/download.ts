@@ -1,19 +1,23 @@
-import fs from 'fs'
+import fs, { promises as fsPromises } from 'fs'
 import { getOutPath } from './getOutPath'
 import { showLog, showErrorLog, Config } from './utils'
 import request from 'request'
 import { join } from 'path'
 import unzipper from 'unzipper'
 import rimraf from 'rimraf'
+const { stat, mkdir, readdir, copyFile } = fsPromises
+
+const fileExists = async (p: string) => !!(await stat(p).catch(e => false));
 
 const download = async function (config: Config) {
   const outPath = getOutPath(config)
 
   showLog(`outPath:${outPath}`)
 
-  const existsOutDir = fs.existsSync(outPath)
+  const existsOutDir = await fileExists(outPath)
   if (!existsOutDir) {
-    fs.mkdirSync(outPath, { recursive: true })
+    showLog('目标文件夹不存在，创建中...')
+    await mkdir(outPath, { recursive: true })
   }
 
   const writeZipStream = fs.createWriteStream(`${outPath}/download.zip`)
@@ -25,18 +29,18 @@ const download = async function (config: Config) {
         cookie: config.cookie,
       },
     })
-      .on('response', async (response: any) => {
-        console.log(response.req.path)
-        if (response.req.path.startsWith('/errors')) {
-          showErrorLog('下载失败, 请检查 cookie 是否过期')
-          throw new Error('下载失败')
-        }
-        showLog(`statusCode: ${response.statusCode}`)
-      })
-      .on('error', (err: any) => {
-        console.error(err)
-      })
-      .pipe(writeZipStream)
+    .on('response', async (response: any) => {
+      console.log(response.req.path)
+      if (response.req.path.startsWith('/errors')) {
+        showErrorLog('下载失败, 请检查 cookie 是否过期')
+        throw new Error('下载失败')
+      }
+      showLog(`statusCode: ${response.statusCode}`)
+    })
+    .on('error', (err: any) => {
+      console.error(err)
+    })
+    .pipe(writeZipStream)
 
     writeZipStream.on('error', (err) => {
       console.log('eeeeeeerrror',err)
@@ -51,16 +55,16 @@ const download = async function (config: Config) {
       unzipStream.on('close', () => {
         showLog('解压完成')
         setTimeout(async () => {
-          const dirs = fs.readdirSync(outPath)
+          const dirs = await readdir(outPath)
           const fontDir = dirs.find((item) => item.includes('font_')) as string
-          const iconFiles = fs.readdirSync(join(outPath, fontDir))
+          const iconFiles = await readdir(join(outPath, fontDir))
           showLog('拷贝文件')
           // copy到outPath
           iconFiles.filter((file) => {
             return !!config.saveDemoFile || !file.includes('demo')
           }).forEach(async (file) => {
             try {
-              fs.copyFileSync(join(outPath, fontDir, file), `${outPath}/${file}`)
+              await copyFile(join(outPath, fontDir, file), `${outPath}/${file}`)
             } catch (err) {
               console.log(err)
             }
