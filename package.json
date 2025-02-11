@@ -1,52 +1,58 @@
 {
   "name": "pull-iconfont",
-  "version": "3.0.0",
-  "description": "pull iconfont, download iconfont",
-  "main": "./dist/index.js",
+  "version": "3.0.1",
   "type": "module",
   "bin": {
     "pull-iconfont": "./dist/index.js"
   },
-  "files": [
-    "src",
-    "dist"
-  ],
+  "author": "hansinhu <hansincn@gmail.com>",
   "scripts": {
     "test": "./dist/index.js -c ./example/.pulliconfontrc.js",
-    "build": "tsc --project tsconfig.json",
-    "lint:ts": "eslint ./src --fix --ext .ts,.tsx"
+    "start": "tsx src/index.ts chat",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "prepublishOnly": "npm run build",
+    "dev": "tsx watch src/index.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hansinhu/pull-iconfont.git"
-  },
-  "keywords": [
-    "download",
-    "iconfont",
-    "from",
-    "iconfont.cn"
+  "maintainers": [
+    "hansinhu"
   ],
-  "author": "hansinhu <hansincn@gmail.com>",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hansinhu/pull-iconfont/issues"
-  },
-  "homepage": "https://github.com/hansinhu/pull-iconfont#readme",
   "dependencies": {
-    "@babel/parser": "^7.16.4",
-    "chalk": "^2.4.2",
-    "commander": "^12.1.0",
+    "axios": "^1.6.2",
+    "chalk": "^5.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.2",
+    "filenamify": "^6.0.0",
+    "fs-extra": "^11.3.0",
+    "get-port": "^7.1.0",
+    "inquirer": "^12.4.1",
+    "lodash": "^4.17.21",
+    "log4js": "^6.9.1",
     "node-fetch": "^3.3.2",
-    "rimraf": "^3.0.2",
-    "unzipper": "^0.12.3"
+    "open": "^10.1.0",
+    "openai": "^4.24.1",
+    "ora": "^7.0.1",
+    "rimraf": "^6.0.1",
+    "sade": "^1.8.1",
+    "shelljs": "^0.8.5",
+    "sort-json": "^2.0.1",
+    "sort-keys": "^5.1.0",
+    "unzipper": "^0.12.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@hansin/lint-config": "^0.0.1",
-    "@types/node": "^12.20.37",
-    "@types/rimraf": "^3.0.2",
-    "@types/unzipper": "^0.10.4",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.1.2",
-    "typescript": "^5.5.4"
+    "@types/node": "^20.10.5",
+    "@types/unzipper": "^0.10.10",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=14.16"
   }
 }
