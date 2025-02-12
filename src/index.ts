@@ -38,7 +38,7 @@ async function loadConfig(config: string) {
 prog
   .command("chat")
   .describe("Start a chat session with AI")
-  .action(async () => console.log("chatting with AI"));
+  .action(() => console.log("chatting with AI"));
 
 // 设置默认命令为 chat
 prog.command("start").action(main);
