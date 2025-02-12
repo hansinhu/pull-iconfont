@@ -4,7 +4,7 @@ import { showLog, Config } from "./utils.js";
 import fetch from "node-fetch";
 import { join } from "path";
 import unzipper from "unzipper";
-import rimraf from "rimraf";
+import { sync as rimrafSync } from "rimraf";
 const { stat, mkdir, readdir, copyFile } = fsPromises;
 
 const fileExists = async (p: string) => !!(await stat(p).catch(() => false));
@@ -79,8 +79,8 @@ const download = async function (config: Config) {
 
           // 删除过渡文件
           try {
-            rimraf.sync(join(outPath, fontDir));
-            rimraf.sync(`${outPath}/download.zip`);
+            rimrafSync(join(outPath, fontDir));
+            rimrafSync(`${outPath}/download.zip`);
           } catch (err) {
             console.log(err);
           }
