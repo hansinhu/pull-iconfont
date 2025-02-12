@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-
 import chalk from "chalk";
 import { resolve } from "path";
-import { download } from "./download.js";
-import { svgParser } from "./svgParser.js";
-import { getConfig, showErrorLog, showLog, Config } from "./utils.js";
+import { download } from "./download";
+import { svgParser } from "./svgParser";
+import { getConfig, showErrorLog, showLog, Config } from "./utils";
 import sade from "sade";
 import dotenv from "dotenv";
 import { readFileSync } from "fs";
@@ -42,23 +41,8 @@ prog
   .action(async () => console.log("chatting with AI"));
 
 // 设置默认命令为 chat
-prog.command("").action(async (opts) => {
-  main(opts)
-    .then(() => {
-      showLog("pull-iconfont end");
-      showLog("code by hansinhu: https://github.com/hansinhu/pull-iconfont");
-    })
-    .catch((err) => {
-      console.log("Aborting installation.");
-      if (err.command) {
-        console.log(`  ${chalk.cyan(err.command)} has failed.`);
-      } else {
-        showErrorLog("Unexpected error. Please report it as a bug:");
-        console.log(err);
-      }
-      process.exit(1);
-    });
-});
+prog.command("start").action(main);
+prog.command("").action(main);
 
 async function main(opts: any) {
   const configPath = opts.config || ".pulliconfontrc.js"; // 如果用户没有指定则使用默认配置文件
@@ -74,6 +58,9 @@ async function main(opts: any) {
     showLog("使用 svg 图标，通过 pickicons 解析需要的icon");
     svgParser(config);
   }
+
+  showLog("pull-iconfont end");
+  showLog("code by hansinhu: https://github.com/hansinhu/pull-iconfont");
 }
 
-prog.parse(process.argv);
+// prog.parse(process.argv);

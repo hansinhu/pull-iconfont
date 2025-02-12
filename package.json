@@ -7,7 +7,7 @@
   },
   "author": "hansinhu <hansincn@gmail.com>",
   "scripts": {
-    "test": "./dist/index.js -c ./example/.pulliconfontrc.js",
+    "test": "./dist/index.js start",
     "start": "tsx src/index.ts chat",
     "build": "tsup src/index.ts --format esm --dts --clean",
     "prepublishOnly": "npm run build",
