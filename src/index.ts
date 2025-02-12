@@ -1,24 +1,13 @@
 #!/usr/bin/env node
-import chalk from "chalk";
-import { resolve } from "path";
+import sade from "sade";
+import dotenv from "dotenv";
 import { download } from "./download";
 import { svgParser } from "./svgParser";
 import { getConfig, showErrorLog, showLog, Config } from "./utils";
-import sade from "sade";
-import dotenv from "dotenv";
+import { resolve } from "path";
 import { readFileSync } from "fs";
 
 dotenv.config();
-
-const pkg = JSON.parse(
-  readFileSync(new URL("../package.json", import.meta.url), "utf-8")
-);
-
-const prog = sade("pull-iconfont");
-// 版本
-prog
-  .version(pkg.version)
-  .option("-c, --config", "配置文件", ".pulliconfontrc.js");
 
 // 读取配置函数
 async function loadConfig(config: string) {
@@ -35,16 +24,8 @@ async function loadConfig(config: string) {
   return configFile;
 }
 
-prog
-  .command("chat")
-  .describe("Start a chat session with AI")
-  .action(() => console.log("chatting with AI"));
-
-// 设置默认命令为 chat
-prog.command("start").action(main);
-prog.command("").action(main);
-
-async function main(opts: any) {
+async function pullIcon(opts: any) {
+  console.log("opts:", opts);
   const configPath = opts.config || ".pulliconfontrc.js"; // 如果用户没有指定则使用默认配置文件
   const config = await loadConfig(configPath);
 
@@ -63,4 +44,29 @@ async function main(opts: any) {
   showLog("code by hansinhu: https://github.com/hansinhu/pull-iconfont");
 }
 
-// prog.parse(process.argv);
+const pkg = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf-8")
+);
+
+console.log("pull-iconfont version: ", pkg.version);
+
+const prog = sade("pull-iconfont");
+// 版本
+prog
+  .version(pkg.version)
+  .option("-c, --config", "配置文件", ".pulliconfontrc.js");
+
+// Chat command
+prog
+  .command("chat")
+  .describe("Start a chat session with AI")
+  .example("$ pull-iconfont chat")
+  .action(() => console.log("chatting with AI!!"));
+
+prog
+  .command("start")
+  .describe("下载 iconfont 文件")
+  .example("$ pull-iconfont start")
+  .action(pullIcon);
+
+prog.parse(process.argv);
